@@ -1,0 +1,135 @@
+<div class="main-body">
+  <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
+    <div class="container">
+      <a class="navbar-brand" href="/customers">Navbar</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a routerLink="/customers" class="nav-link active" aria-current="page" href="/customers">Home</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="container">
+    <div class="row mt-3">
+      <div class="col-lg-4">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex flex-column align-items-center text-center">
+              <img [src]="customer.imageUrl" alt="Admin"
+                   class="rounded-circle p-1 bg-primary" width="110">
+              <div class="mt-3">
+                <h4>{{customer.firstName}}</h4>
+                <p class="text-secondary mb-1">{{customer.firstName}}</p>
+                <p class="text-muted font-size-sm">ID: {{customer.id}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-8">
+        <div class="card">
+          <div class="card-body">
+            <div class="row mb-3">
+              <div class="col-sm-3">
+                <h6 class="mb-0">First Name</h6>
+              </div>
+              <div class="col-sm-9 text-secondary">
+                <input [disabled]="mode==='locked'" type="text" class="form-control" [value]="customer.firstName">
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-sm-3">
+                <h6 class="mb-0">Last Name</h6>
+              </div>
+              <div class="col-sm-9 text-secondary">
+                <input [disabled]="mode==='locked'" type="text" class="form-control" [value]="customer.lastName">
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-sm-3">
+                <h6 class="mb-0">Username</h6>
+              </div>
+              <div class="col-sm-9 text-secondary">
+                <input [disabled]="mode==='locked'" type="text" class="form-control" [value]="customer.username">
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-sm-3">
+                <h6 class="mb-0">Gender</h6>
+              </div>
+              <div class="col-sm-9 text-secondary">
+                <input [disabled]="mode==='locked'" type="text" class="form-control" [value]="customer.gender">
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-sm-3">
+                <h6 class="mb-0">Date of birth</h6>
+              </div>
+              <div class="col-sm-9 text-secondary">
+                <input [disabled]="mode==='locked'" type="text" class="form-control" [value]="customer.dateOfBirth">
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-sm-3">
+                <h6 class="mb-0">Email</h6>
+              </div>
+              <div class="col-sm-9 text-secondary">
+                <input [disabled]="mode==='locked'" type="text" class="form-control" [value]="customer.email">
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-sm-3">
+                <h6 class="mb-0">Status</h6>
+              </div>
+              <div class="col-sm-9 text-secondary">
+                <input [disabled]="mode==='locked'" type="text" class="form-control" [value]="customer.status">
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-sm-3">
+                <h6 class="mb-0">Address</h6>
+              </div>
+              <div class="col-sm-9 text-secondary">
+                <input [disabled]="mode==='locked'" type="text" class="form-control" [value]="customer.address">
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-sm-3">
+                <h6 class="mb-0">Phone</h6>
+              </div>
+              <div class="col-sm-9 text-secondary">
+                <input [disabled]="mode==='locked'" type="text" class="form-control" [value]="customer.phone">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-3"></div>
+              <div class="col-sm-9 text-secondary">
+                <button (click)="changeMode(mode)" type="button" class="btn btn-primary px-4">{{buttonText}}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col-sm-12">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="d-flex align-items-center mb-3">User Location</h5>
+                <div class="map-container">
+                  <div class="map-frame">
+                    <div id="map"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
