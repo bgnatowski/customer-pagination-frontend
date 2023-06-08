@@ -7,18 +7,24 @@ import { HttpClientModule } from "@angular/common/http";
 import {FormsModule} from "@angular/forms";
 import { CustomersComponent } from './component/customers/customers.component';
 import { CustomerdetailComponent } from './component/customerdetail/customerdetail.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatDialogModule} from "@angular/material/dialog";
+import { EditdialogComponent } from './component/editdialog/editdialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CustomersComponent,
-    CustomerdetailComponent
+    CustomerdetailComponent,
+    EditdialogComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    BrowserAnimationsModule,
+    MatDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]

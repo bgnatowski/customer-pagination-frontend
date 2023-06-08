@@ -1,0 +1,12 @@
+<div class="container">
+    <div class="row bg-white">
+      <h2>Edit image url</h2>
+      <div class="text-secondary">
+        <input type="text" [(ngModel)]="newImageUrl" class="form-control" placeholder="new image url">
+      </div>
+      <div class="col-sm-15 mt-2 mb-2 d-flex flex-row-reverse" >
+        <button (click)="saveImageUrl()" class="btn btn-secondary">Save</button>
+        <button (click)="closeDialog()" class="btn btn-secondary">Close</button>
+      </div>
+    </div>
+</div>

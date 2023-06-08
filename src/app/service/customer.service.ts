@@ -25,4 +25,9 @@ export class CustomerService {
     return this.http.put<CustomerResponse>(`${this.serverUrl}/customer/${id}`, customerUpdate);
   }
 
+  updateCustomerImage(id: number, customerUpdate: Customer) : Observable<CustomerResponse>{
+    console.log("path, id=", id, " customer = ", customerUpdate)
+    return this.http.patch<CustomerResponse>(`${this.serverUrl}/customer/${id}`, customerUpdate);
+  }
+
 }

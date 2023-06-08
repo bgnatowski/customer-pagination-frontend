@@ -15,14 +15,23 @@
       </div>
     </div>
   </nav>
-  <div class="container">
+  <div class="container" id="main-container">
     <div class="row mt-3">
       <div class="col-lg-4">
         <div class="card">
           <div class="card-body">
             <div class="d-flex flex-column align-items-center text-center">
-              <img [src]="customer.imageUrl" alt="Admin"
-                   class="rounded-circle p-1 bg-primary" width="110">
+              <div class="position-relative">
+                <div>
+                  <a (click)="openEditPhotoDialog(customer)">
+                    <img [src]="customer.imageUrl" alt="{{customer.username}}'s image"
+                       class="rounded-circle p-1 bg-primary img-responsive" width="110"
+                       (mouseenter)="showOverlay = true" (mouseleave)="showOverlay = false">
+                    <img *ngIf="showOverlay" class="overlay" src="https://cdn2.iconfinder.com/data/icons/picol-vector/32/image_edit-512.png" alt="Overlay Image"
+                         class="overlay-image rounded-circle" width="110">
+                  </a>
+                </div>
+              </div>
               <div class="mt-3">
                 <h4>{{customer.firstName}} {{customer.lastName}}</h4>
                 <p class="text-secondary mb-1">Username: {{customer.username}}</p>
@@ -32,122 +41,114 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-8">
-        <div class="card">
-          <div class="card-body">
-            <div class="row mb-3">
-              <div class="col-sm-3">
-                <h6 class="mb-0">First Name</h6>
-              </div>
-              <div class="col-sm-9 text-secondary">
-                <input [disabled]="mode==='locked'" type="text" class="form-control" [value]="customer.firstName">
-              </div>
-            </div>
-            <div class="row mb-3">
-              <div class="col-sm-3">
-                <h6 class="mb-0">Last Name</h6>
-              </div>
-              <div class="col-sm-9 text-secondary">
-                <input [disabled]="mode==='locked'" type="text" class="form-control" [value]="customer.lastName">
-              </div>
-            </div>
-            <div class="row mb-3">
-              <div class="col-sm-3">
-                <h6 class="mb-0">Username</h6>
-              </div>
-              <div class="col-sm-9 text-secondary">
-                <input [disabled]="mode==='locked'" type="text" class="form-control" [value]="customer.username">
-              </div>
-            </div>
-            <div class="row mb-3">
-              <div class="col-sm-3">
-                <h6 class="mb-0">Gender</h6>
-              </div>
-              <div class="col-sm-9 text-secondary">
-                <select [disabled]="mode==='locked'" class="form-select">
-                  <option *ngFor="let opt of genderOptions"
-                          [selected]="opt === customer.gender"
-                          [value]="opt"
-                  >
-                    {{opt}}
-                  </option>
-                </select>
-              </div>
-            </div>
-            <div class="row mb-3">
-              <div class="col-sm-3">
-                <h6 class="mb-0">Date of birth</h6>
-              </div>
-              <div class="col-sm-9 text-secondary">
-                <div class="input-group date" id="datepicker">
-                  <input [disabled]="mode==='locked'" type="date" class="form-control" id="date" [value]="customer.dateOfBirth"/>
+      <form #editForm="ngForm" class="col-lg-8">
+          <div class="card">
+            <div class="card-body">
+              <div class="row mb-3">
+                <div class="col-sm-9 text-secondary">
+                  <input [hidden]="true" class="form-control" [ngModel]="customer?.id" name="id">
                 </div>
               </div>
-            </div>
-            <div class="row mb-3">
-              <div class="col-sm-3">
-                <h6 class="mb-0">Email</h6>
+              <div class="row mb-3">
+                <div class="col-sm-3">
+                  <h3 class="mb-0">First Name</h3>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                  <input [disabled]="mode==='locked'" type="text" class="form-control" [ngModel]="customer?.firstName" name="firstName">
+                </div>
               </div>
-              <div class="col-sm-9 text-secondary">
-                <input [disabled]="mode==='locked'" type="text" class="form-control" [value]="customer.email">
+              <div class="row mb-3">
+                <div class="col-sm-3">
+                  <h3 class="mb-0">Last Name</h3>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                  <input [disabled]="mode==='locked'" type="text" class="form-control" [ngModel]="customer?.lastName" name="lastName">
+                </div>
               </div>
-            </div>
-            <div class="row mb-3">
-              <div class="col-sm-3">
-                <h6 class="mb-0">Status</h6>
+              <div class="row mb-3">
+                <div class="col-sm-3">
+                  <h3 class="mb-0">Username</h3>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                  <input [disabled]="mode==='locked'" type="text" class="form-control" [ngModel]="customer?.username" name="username">
+                </div>
               </div>
-              <div class="col-sm-9 text-secondary">
-                <select [disabled]="mode==='locked'" class="form-select">
-                  <option *ngFor="let opt of statusOptions"
-                          [selected]="opt === customer.status"
-                          [value]="opt"
-                  >
-                    {{opt}}
-                  </option>
-                </select>
+              <div class="row mb-3">
+                <div class="col-sm-3">
+                  <h3 class="mb-0">Gender</h3>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                  <select [disabled]="mode==='locked'" class="form-select" [ngModel]="customer?.gender" name="gender">
+                    <option *ngFor="let opt of genderOptions"
+                            [selected]="opt === customer.gender"
+                            [ngValue]="opt"
+                    >
+                      {{opt}}
+                    </option>
+                  </select>
+                </div>
               </div>
-            </div>
-            <div class="row mb-3">
-              <div class="col-sm-3">
-                <h6 class="mb-0">Address</h6>
-              </div>
-              <div class="col-sm-9 text-secondary">
-                <input [disabled]="mode==='locked'" type="text" class="form-control" [value]="customer.address">
-              </div>
-            </div>
-            <div class="row mb-3">
-              <div class="col-sm-3">
-                <h6 class="mb-0">Phone</h6>
-              </div>
-              <div class="col-sm-9 text-secondary">
-                <input [disabled]="mode==='locked'" type="text" class="form-control" [value]="customer.phone">
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-sm-3"></div>
-              <div class="col-sm-9 text-secondary">
-                <button (click)="changeMode(mode)" type="button" class="btn btn-primary px-4">{{buttonText}}</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row mt-2">
-          <div class="col-sm-12">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="d-flex align-items-center mb-3">User Location</h5>
-                <div class="map-container">
-                  <div class="map-frame">
-                    <div id="map"></div>
+              <div class="row mb-3">
+                <div class="col-sm-3">
+                  <h3 class="mb-0">Date of birth</h3>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                  <div class="input-group date" id="datepicker">
+                    <input [disabled]="mode==='locked'" type="date" class="form-control" id="date" [ngModel]="customer?.dateOfBirth" name="dateOfBirth"/>
                   </div>
                 </div>
               </div>
+              <div class="row mb-3">
+                <div class="col-sm-3">
+                  <h3 class="mb-0">Email</h3>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                  <input [disabled]="mode==='locked'" type="text" class="form-control" [ngModel]="customer?.email" name="email">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-sm-3">
+                  <h3 class="mb-0">Status</h3>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                  <select [disabled]="mode==='locked'" class="form-select" [ngModel]="customer?.status" name="status">
+                    <option *ngFor="let opt of statusOptions"
+                            [selected]="opt === customer.status"
+                            [value]="opt"
+                    >
+                      {{opt}}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-sm-3">
+                  <h3 class="mb-0">Address</h3>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                  <input [disabled]="mode==='locked'" type="text" class="form-control" [ngModel]="customer?.address" name="address">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-sm-3">
+                  <h3 class="mb-0">Phone</h3>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                  <input [disabled]="mode==='locked'" type="text" class="form-control" [ngModel]="customer?.phone" name="phone">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-3"></div>
+                <div class="col-sm-9 text-secondary">
+                  <button (click)="changeMode(mode, editForm.value)" type="button" class="btn btn-primary px-4">{{buttonText}}</button>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+      </form>
     </div>
   </div>
 </div>
 <script src = "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 <script src ="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
