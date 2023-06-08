@@ -12,6 +12,8 @@ export class CustomerdetailComponent implements OnInit{
   mode: 'edit' | 'locked' = 'locked';
   buttonText: 'Save Changes' | 'Edit' = 'Edit';
   customer: Customer;
+  genderOptions:string[] = ['Genderqueer', 'Bigender', 'Genderfluid', 'Male', 'Polygender', 'Non-binary', 'Female', 'Agender'];
+  statusOptions:string[] = ['BANNED', 'ACTIVE', 'INACTIVE'];
   constructor(private activatedRoute: ActivatedRoute, private customerService: CustomerService) {
   }
 
