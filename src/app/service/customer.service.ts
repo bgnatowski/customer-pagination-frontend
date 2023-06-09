@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Page} from "../interface/page";
 import {ApiResponse} from "../interface/api-response";
@@ -25,9 +25,10 @@ export class CustomerService {
     return this.http.put<CustomerResponse>(`${this.serverUrl}/customer/${id}`, customerUpdate);
   }
 
-  updateCustomerImage(id: number, customerUpdate: Customer) : Observable<CustomerResponse>{
-    console.log("path, id=", id, " customer = ", customerUpdate)
-    return this.http.patch<CustomerResponse>(`${this.serverUrl}/customer/${id}`, customerUpdate);
+  updateCustomerImage(id: number, imageUrl: string) : Observable<CustomerResponse>{
+    console.log("path, id=", id, " imageUrl = ", imageUrl)
+
+    return this.http.patch<CustomerResponse>(`${this.serverUrl}/customer/${id}`, imageUrl);
   }
 
 }

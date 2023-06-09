@@ -3,11 +3,8 @@ import {ActivatedRoute} from "@angular/router";
 import {CustomerService} from "../../service/customer.service";
 import {Customer} from "../../interface/customer";
 import {catchError, tap, throwError} from "rxjs";
-import {HttpErrorResponse} from "@angular/common/http";
 import {CustomerResponse} from "../../interface/customer-response";
-import {MatDialog} from "@angular/material/dialog";
-import {EditdialogComponent} from "../editdialog/editdialog.component";
-
+import {HttpErrorResponse} from "@angular/common/http";
 @Component({
   selector: 'app-customerdetail',
   templateUrl: './customerdetail.component.html',
@@ -20,7 +17,7 @@ export class CustomerdetailComponent implements OnInit{
   genderOptions:string[] = ['Genderqueer', 'Bigender', 'Genderfluid', 'Male', 'Polygender', 'Non-binary', 'Female', 'Agender'];
   statusOptions:string[] = ['BANNED', 'ACTIVE', 'INACTIVE'];
   showOverlay: boolean;
-  constructor(private activatedRoute: ActivatedRoute, private customerService: CustomerService, private dialog: MatDialog) {
+  constructor(private activatedRoute: ActivatedRoute, private customerService: CustomerService) {
   }
 
   ngOnInit(): void {
@@ -37,18 +34,24 @@ export class CustomerdetailComponent implements OnInit{
     }
   }
 
-  openEditPhotoDialog(customer: Customer) {
-    const dialogRef = this.dialog.open(EditdialogComponent, {
-      width: '400px', // Dostosuj szerokość okna dialogowego do własnych preferencji
-      data: this.customer.imageUrl
-    });
 
-    dialogRef.afterClosed().subscribe((newImageUrl: string) => {
-      if (newImageUrl) {
-        customer.imageUrl = newImageUrl;
-        this.customerService.updateCustomerImage(customer.id, customer).subscribe();
-        console.log(customer);
-      }
-    });
+  onEditImageUrl(imageUrl: string) {
+    let closeButton = document.getElementById("edit-imageurl-close");
+    if (!closeButton) {
+      console.error('Element with id "edit-imageurl-close" not found in the DOM.');
+      return;
+    }
+    closeButton.click();
+    // this.customerService.updateCustomerImage(this.customer.id, imageUrl).subscribe();
+    this.customerService.updateCustomerImage(this.customer.id, imageUrl).pipe(
+      tap((response: CustomerResponse) => {
+        console.log(response);
+        this.customer = response.data.customer;
+      }),
+      catchError((error: HttpErrorResponse) => {
+        // alert(error.message);
+        return throwError(() => error);
+      })
+    ).subscribe();
   }
 }
