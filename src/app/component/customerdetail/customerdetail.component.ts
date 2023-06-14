@@ -29,7 +29,6 @@ export class CustomerdetailComponent implements OnInit{
     this.buttonText = this.buttonText === 'Edit' ? 'Save Changes' : "Edit";
 
     if(mode === 'edit'){
-      // logic to update user on the backend
       this.customerService.updateCustomer(this.customer.id, <Customer>(updatedCustomer)).subscribe();
     }
   }

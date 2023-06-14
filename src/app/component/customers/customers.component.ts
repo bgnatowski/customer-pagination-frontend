@@ -1,9 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {BehaviorSubject, catchError, map, Observable, of, startWith} from "rxjs";
+import {BehaviorSubject, catchError, map, Observable, of, startWith, tap, throwError} from "rxjs";
 import {ApiResponse} from "../../interface/api-response";
 import {Page} from "../../interface/page";
 import {HttpErrorResponse} from "@angular/common/http";
 import {CustomerService} from "../../service/customer.service";
+import {Customer} from "../../interface/customer";
+import {NgForm} from "@angular/forms";
+import {CustomerResponse} from "../../interface/customer-response";
 
 @Component({
   selector: 'app-customers',
@@ -20,11 +23,16 @@ export class CustomersComponent implements OnInit{
   }>
   selectedPageSize: string;
   currentPage$ = this.currentPageSubject.asObservable();
-
+  genderOptions:string[] = ['Genderqueer', 'Bigender', 'Genderfluid', 'Male', 'Polygender', 'Non-binary', 'Female', 'Agender'];
+  public deleteCustomer: Customer;
   constructor(private customerService: CustomerService) {
   }
 
   ngOnInit() {
+    this.getCustomers();
+  }
+
+  public getCustomers(): void {
     this.customersState$ = this.customerService.customers$('', 0, 10).pipe(
       map((response: ApiResponse<Page>) => {
           this.responseSubject.next(response);
@@ -41,7 +49,6 @@ export class CustomersComponent implements OnInit{
       catchError((error: HttpErrorResponse) => of({appState: 'APP_ERROR', error})
       ));
   }
-
   goToPage(name?: string, pageNumber: number = 0) {
     this.customersState$ = this.customerService.customers$(name, pageNumber, parseInt(this.selectedPageSize, 10)).pipe(
       map((response: ApiResponse<Page>) => {
@@ -70,5 +77,51 @@ export class CustomersComponent implements OnInit{
     this.selectedPageSize = selectedPageSize;
     this.currentPageSubject.next(0);
     this.goToPage('', this.currentPageSubject.value);
+  }
+
+  onAddCustomer(addForm: NgForm) {
+    let closeButton = document.getElementById("add-employee-form");
+    if (!closeButton) {
+      console.error('Element with id "add-employee-form" not found in the DOM.');
+      return;
+    }
+    closeButton.click();
+    let addCustomer:Customer = addForm.value;
+    console.log(addCustomer)
+    this.customerService.addCustomer(addCustomer).pipe(
+      tap((response: CustomerResponse) => {
+        console.log(response);
+        this.getCustomers()
+        addForm.reset();
+      }),
+      catchError((error: HttpErrorResponse) => {
+        alert(error.message);
+        addForm.reset();
+        return throwError(() => error);
+      })
+    ).subscribe();
+  }
+
+  setDeleteCustomer(customer: Customer) {
+    this.deleteCustomer = customer;
+  }
+  public onDeleteCustomer(customerId: number) {
+    let closeButton = document.getElementById("delete-button-close");
+    if (!closeButton) {
+      console.error('Element with id "delete-button-close" not found in the DOM.');
+      return;
+    }
+    closeButton.click();
+
+    this.customerService.deleteCustomer(customerId).pipe(
+      tap((response: string) => {
+        console.log(response);
+        this.getCustomers();
+      }),
+      catchError((error: HttpErrorResponse) => {
+        alert(error.message);
+        return throwError(() => error);
+      })
+    ).subscribe();
   }
 }

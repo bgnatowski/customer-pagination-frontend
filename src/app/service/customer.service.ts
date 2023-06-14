@@ -31,4 +31,12 @@ export class CustomerService {
     return this.http.patch<CustomerResponse>(`${this.serverUrl}/customer/${id}`, imageUrl);
   }
 
+  public deleteCustomer(customerId: number): Observable<string>{
+    return this.http.delete<string>(`${this.serverUrl}/customers/delete/${customerId}`);
+  }
+
+  public addCustomer(customer: Customer): Observable<CustomerResponse>{
+    return this.http.post<CustomerResponse>(`${this.serverUrl}/customers/add`, customer);
+  }
+
 }
