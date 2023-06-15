@@ -5,6 +5,7 @@ import {Customer} from "../../interface/customer";
 import {catchError, tap, throwError} from "rxjs";
 import {CustomerResponse} from "../../interface/customer-response";
 import {HttpErrorResponse} from "@angular/common/http";
+import {ApiError} from "../../interface/api-error";
 @Component({
   selector: 'app-customerdetail',
   templateUrl: './customerdetail.component.html',
@@ -29,7 +30,16 @@ export class CustomerdetailComponent implements OnInit{
     this.buttonText = this.buttonText === 'Edit' ? 'Save Changes' : "Edit";
 
     if(mode === 'edit'){
-      this.customerService.updateCustomer(this.customer.id, <Customer>(updatedCustomer)).subscribe();
+      this.customerService.updateCustomer(this.customer.id, <Customer>(updatedCustomer)).pipe(
+        tap((response: CustomerResponse) => {
+          console.log(response);
+          this.customer = response.data.customer;
+        }),
+        catchError((errorResponse: HttpErrorResponse) => {
+          alert(errorResponse.error.message);
+          return throwError(() => errorResponse.error);
+        })
+      ).subscribe();
     }
   }
 
@@ -41,14 +51,13 @@ export class CustomerdetailComponent implements OnInit{
       return;
     }
     closeButton.click();
-    // this.customerService.updateCustomerImage(this.customer.id, imageUrl).subscribe();
     this.customerService.updateCustomerImage(this.customer.id, imageUrl).pipe(
       tap((response: CustomerResponse) => {
         console.log(response);
         this.customer = response.data.customer;
       }),
-      catchError((error: HttpErrorResponse) => {
-        // alert(error.message);
+      catchError((error: ApiError) => {
+        alert(error.message);
         return throwError(() => error);
       })
     ).subscribe();

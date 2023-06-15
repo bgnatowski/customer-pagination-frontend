@@ -7,6 +7,7 @@ import {CustomerService} from "../../service/customer.service";
 import {Customer} from "../../interface/customer";
 import {NgForm} from "@angular/forms";
 import {CustomerResponse} from "../../interface/customer-response";
+import {ApiError} from "../../interface/api-error";
 
 @Component({
   selector: 'app-customers',
@@ -19,7 +20,7 @@ export class CustomersComponent implements OnInit{
   customersState$: Observable<{
     appState: string,
     appData?: ApiResponse<Page>,
-    error?: HttpErrorResponse
+    error?: ApiError
   }>
   selectedPageSize: string;
   currentPage$ = this.currentPageSubject.asObservable();
@@ -46,7 +47,7 @@ export class CustomersComponent implements OnInit{
         }
       ),
       startWith({appState: 'APP_LOADING'}),
-      catchError((error: HttpErrorResponse) => of({appState: 'APP_ERROR', error})
+      catchError((error: ApiError) => of({appState: 'APP_ERROR', error})
       ));
   }
   goToPage(name?: string, pageNumber: number = 0) {
@@ -63,7 +64,7 @@ export class CustomersComponent implements OnInit{
         }
       ),
       startWith({appState: 'APP_LOADED', appData: this.responseSubject.value}),
-      catchError((error: HttpErrorResponse) => of({appState: 'APP_ERROR', error})
+      catchError((error: ApiError) => of({appState: 'APP_ERROR', error})
       ));
   }
 
@@ -86,18 +87,19 @@ export class CustomersComponent implements OnInit{
       return;
     }
     closeButton.click();
+
     let addCustomer:Customer = addForm.value;
-    console.log(addCustomer)
+
     this.customerService.addCustomer(addCustomer).pipe(
       tap((response: CustomerResponse) => {
         console.log(response);
         this.getCustomers()
         addForm.reset();
       }),
-      catchError((error: HttpErrorResponse) => {
-        alert(error.message);
+      catchError((errorResponse: HttpErrorResponse) => {
+        alert(errorResponse.error.message);
         addForm.reset();
-        return throwError(() => error);
+        return throwError(() => errorResponse.error);
       })
     ).subscribe();
   }
@@ -118,9 +120,9 @@ export class CustomersComponent implements OnInit{
         console.log(response);
         this.getCustomers();
       }),
-      catchError((error: HttpErrorResponse) => {
-        alert(error.message);
-        return throwError(() => error);
+      catchError((errorResponse: HttpErrorResponse) => {
+        alert(errorResponse.error.message);
+        return throwError(() => errorResponse.error);
       })
     ).subscribe();
   }
