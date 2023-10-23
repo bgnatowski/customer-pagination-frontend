@@ -10,7 +10,7 @@ import {CustomerResponse} from "../interface/customer-response";
   providedIn: 'root'
 })
 export class CustomerService {
-  private readonly serverUrl: string = 'http://localhost:8085';
+  private readonly serverUrl: string = 'http://localhost:8080';
   constructor(private http: HttpClient) { }
 
 
